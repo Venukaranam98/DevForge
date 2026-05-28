@@ -5,5 +5,12 @@
         "backend": "FastAPI",
         "database": "PostgreSQL",
         "project_type": "Auth API Starter"
+    },
+    {
+        "project_name": "myapp",
+        "frontend": "React",
+        "backend": "Node",
+        "database": "MongoDB",
+        "project_type": "AI API Starter"
     }
 ]
