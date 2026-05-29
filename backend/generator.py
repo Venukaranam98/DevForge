@@ -472,52 +472,6 @@ services:
         )
 
 
-    # SAVE PROJECT HISTORY
-
-    history_file = os.path.join(
-
-        BASE_DIR,
-
-        "history.json"
-
-    )
-
-    if os.path.exists(history_file):
-
-        with open(history_file, "r") as file:
-
-            history = json.load(file)
-
-    else:
-
-        history = []
-
-    history.append({
-
-        "project_name": project_name,
-
-        "frontend": frontend,
-
-        "backend": backend,
-
-        "database": database,
-
-        "project_type": project_type
-
-    })
-
-    with open(history_file, "w") as file:
-
-        json.dump(
-
-            history,
-
-            file,
-
-            indent=4
-
-        )
-
    
     # ZIP FILE
 
