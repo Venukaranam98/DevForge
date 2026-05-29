@@ -67,17 +67,22 @@ def generate_project(project: ProjectSchema):
 @app.get("/history")
 def get_history():
 
-    history_file = os.path.join(BASE_DIR, "history.json")
+    db = SessionLocal()
 
-    if not os.path.exists(history_file):
-        return {
-            "success": True,
-            "message": "No history found",
-            "data": []
-        }
+    projects = db.query(Project).all()
 
-    with open(history_file, "r") as file:
-        history = json.load(file)
+    history = []
+
+    for project in projects:
+        history.append({
+            "project_name": project.project_name,
+            "frontend": project.frontend,
+            "backend": project.backend,
+            "database": project.database,
+            "project_type": project.project_type
+        })
+
+    db.close()
 
     return {
         "success": True,
