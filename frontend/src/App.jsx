@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
-
 import axios from "axios"
 
+const API_URL = "https://devforge-5419.onrender.com"
 
 function App() {
 
@@ -28,28 +28,23 @@ function App() {
 
   }, [])
 
+const fetchHistory = async () => {
 
-  const fetchHistory = async () => {
+  try {
 
-    try {
+    const response = await axios.get(`${API_URL}/history`)
 
-      const response = await axios.get(
-
-        "http://127.0.0.1:8000/history"
-
-      )
-
-      setHistory(response.data.data)
-
-    }
-
-    catch (error) {
-
-      console.log(error)
-
-    }
+    setHistory(response.data.data)
 
   }
+
+  catch (error) {
+
+    console.log(error)
+
+  }
+
+}
 
 
   const generateProject = async () => {
@@ -68,9 +63,8 @@ function App() {
 
       setSuccess("")
 
-      const response = await axios.post(
-
-        "http://127.0.0.1:8000/generate",
+     const response = await axios.post(
+      `${API_URL}/generate`,
 
         {
 
