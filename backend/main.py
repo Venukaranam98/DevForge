@@ -5,9 +5,10 @@ from pydantic import BaseModel
 from generator import create_project
 import json
 import os
-
+from database import SessionLocal, engine, Base
+from models import Project
 app = FastAPI()
-
+Base.metadata.create_all(bind=engine)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app.add_middleware(
@@ -43,6 +44,19 @@ def generate_project(project: ProjectSchema):
         project.database,
         project.project_type
     )
+    db = SessionLocal()
+
+    new_project = Project(
+        project_name=project.project_name,
+        frontend=project.frontend,
+        backend=project.backend,
+        database=project.database,
+        project_type=project.project_type
+    )
+
+    db.add(new_project)
+    db.commit()
+    db.close()
 
     return FileResponse(
         path=zip_path,
@@ -69,4 +83,18 @@ def get_history():
         "success": True,
         "message": "Project history fetched",
         "data": history
+    }
+
+@app.get("/stats")
+def stats():
+
+    db = SessionLocal()
+
+    total_projects = db.query(Project).count()
+
+    db.close()
+
+    return {
+        "success": True,
+        "total_projects": total_projects
     }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState} from "react"
 import axios from "axios"
 
 const API_URL = "https://devforge-5419.onrender.com"
@@ -19,32 +19,6 @@ function App() {
 
   const [success, setSuccess] = useState("")
 
-  const [history, setHistory] = useState([])
-
-
-  useEffect(() => {
-
-    fetchHistory()
-
-  }, [])
-
-const fetchHistory = async () => {
-
-  try {
-
-    const response = await axios.get(`${API_URL}/history`)
-
-    setHistory(response.data.data)
-
-  }
-
-  catch (error) {
-
-    console.log(error)
-
-  }
-
-}
 
 
   const generateProject = async () => {
@@ -114,7 +88,6 @@ const fetchHistory = async () => {
 
       setSuccess("Project generated successfully!")
 
-      fetchHistory()
 
     }
 
@@ -384,63 +357,6 @@ const fetchHistory = async () => {
               </p>
 
             </div>
-
-          </div>
-
-        </div>
-
-
-        <div className="mt-16">
-
-          <h2 className="text-3xl font-bold mb-6">
-
-            Recent Generated Projects
-
-          </h2>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {
-
-              history.map((item, index) => (
-
-                <div
-
-                  key={index}
-
-                  className="bg-gray-900 border border-gray-700 rounded-2xl p-5"
-
-                >
-
-                  <h3 className="text-2xl font-semibold mb-3">
-
-                    {item.project_name}
-
-                  </h3>
-
-                  <p className="text-gray-400">
-
-                    Backend: {item.backend}
-
-                  </p>
-
-                  <p className="text-gray-400">
-
-                    Database: {item.database}
-
-                  </p>
-
-                  <p className="text-gray-400">
-
-                    Type: {item.project_type}
-
-                  </p>
-
-                </div>
-
-              ))
-
-            }
 
           </div>
 
