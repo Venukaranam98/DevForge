@@ -170,3 +170,10 @@ https://dev-forge-fidr.vercel.app
 ### Live Backend API
 
 https://devforge-5419.onrender.com
+
+
+## Installation
+To install DevForge, follow these steps:
+1. Clone the repository using `git clone https://github.com/Venukaranam98/DevForge.git`.
+2. Install the required dependencies using `pip install -r requirements.txt`.
+3. Start the application using `uvicorn main:app --reload`.
