@@ -2,6 +2,8 @@
 
 DevForge AI is a full-stack application that generates complete project repositories using the Groq AI API (`llama-3.3-70b-versatile`), a FastAPI backend, and a React frontend.
 
+**Live Demo:** [https://devforge-anc.pages.dev/](https://devforge-anc.pages.dev/)
+
 ## Features
 
 - AI Project Generation: Generates complete starter project file structures and code using Groq AI.
