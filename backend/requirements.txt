@@ -2,6 +2,15 @@ fastapi
 uvicorn
 python-multipart
 pydantic
+pydantic-settings
 sqlalchemy
 psycopg2-binary
 python-dotenv
+pyjwt
+passlib[bcrypt]
+bcrypt
+groq
+redis
+celery
+email-validator
+pytest
