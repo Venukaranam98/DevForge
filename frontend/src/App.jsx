@@ -50,18 +50,18 @@ function App() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-zinc-100 font-sans">
+    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)", color: "var(--text-primary)" }}>
       {/* Sidebar Navigation */}
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         <Header
           title={getTitle()}
           onNewProjectClick={() => handleNavigateToGenerate("")}
         />
 
-        <main className="flex-1 overflow-y-auto">
+        <main style={{ flex: 1, overflowY: "auto" }}>
           {activeTab === "dashboard" && (
             <DashboardPage
               onNavigateToGenerate={handleNavigateToGenerate}

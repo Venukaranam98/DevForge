@@ -1,172 +1,114 @@
-# DevForge
+# DevForge AI
 
-Professional Full Stack Project Generator built using FastAPI, React, PostgreSQL, SQLAlchemy, Render, and Vercel.
-
-DevForge automatically generates starter full-stack projects with customizable frontend, backend, database, authentication, Docker configuration, and production-ready folder structures.
+DevForge AI is an elite, full-stack AI SaaS platform that dynamically generates complete, production-ready starter project repositories powered by the **Groq AI API (`llama-3.3-70b-versatile`)** and a fast **FastAPI** backend orchestrator paired with a modern, dark-themed **React + JavaScript** frontend.
 
 ---
 
-## Live Demo
+## Key Highlights
 
-### Frontend
-
-https://dev-forge-fidr.vercel.app
-
-### Backend API
-
-https://devforge-5419.onrender.com
+- **Groq AI Integration**: Powered by the official `groq` SDK and `llama-3.3-70b-versatile` model for lightning-fast structured JSON project generation.
+- **100% React + JavaScript**: Pure React + JS (`.jsx`/`.js`) stack with zero TypeScript dependencies.
+- **Bespoke Design System**: Inspired by Linear, Vercel, Raycast, and Cursor with soft glassmorphism, Google Fonts (`Space Grotesk` & `Inter`), and Framer Motion micro-interactions.
+- **Complete Repositories**: Generates complete project file structures including source code, Dockerfiles, `docker-compose.yml`, `README.md`, `.gitignore`, and config files.
+- **Project History & Stats**: Persisted project metadata, interactive code tree explorer, architecture breakdown, and one-click ZIP downloads.
 
 ---
 
-## Features
+## Architecture Flow
 
-* Dynamic Full Stack Project Generation
-* React Frontend Template Generation
-* FastAPI Backend Template Generation
-* Node.js Backend Template Generation
-* PostgreSQL Database Configuration
-* Authentication Starter Template Support
-* Dockerfile Generation
-* Docker Compose Configuration
-* Automatic README Generation
-* Environment File Generation
-* Project ZIP Download
-* PostgreSQL-Based Project History Tracking
-* Project Analytics and Statistics
-* Production-Ready Folder Structure
+```text
+Frontend (React + JS + Framer Motion)
+  ↓
+REST API Request (X-Groq-Api-Key Header)
+  ↓
+FastAPI Orchestrator
+  ↓
+Groq AI Service (llama-3.3-70b-versatile)
+  ↓
+Structured JSON Response Parser
+  ↓
+Disk Storage Service & ZIP Packaging
+  ↓
+PostgreSQL Metadata Tracking
+  ↓
+ZIP Download & Interactive Code Preview
+```
+
+---
+
+## Quick Start
+
+### 1. Backend Setup
+
+```bash
+cd backend
+python -m venv venv
+venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+```
+
+Create a `.env` file in `backend/`:
+
+```env
+DATABASE_URL=postgresql://... (or sqlite:///./devforge.db)
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=llama-3.3-70b-versatile
+```
+
+Run backend server:
+
+```bash
+uvicorn main:app --reload
+```
+
+Backend will run at `http://localhost:8000`. API docs available at `http://localhost:8000/docs`.
+
+### 2. Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend will run at `http://localhost:5173`.
+
+---
+
+## Environment Variables
+
+| Variable | Description |
+| --- | --- |
+| `GROQ_API_KEY` | Groq API Key obtained from [Groq Console](https://console.groq.com/keys) |
+| `GROQ_MODEL` | Default model: `llama-3.3-70b-versatile` |
+| `DATABASE_URL` | PostgreSQL or SQLite database connection URL |
+| `SECRET_KEY` | JWT Secret Key for authentication |
 
 ---
 
 ## Tech Stack
 
 ### Frontend
-
-* React
-* Vite
-* JavaScript
-* CSS
+- React 19
+- Vite
+- JavaScript (JSX / ES6+)
+- Vanilla CSS Design System with CSS Custom Variables
+- Google Fonts (`Space Grotesk` + `Inter`)
+- Framer Motion
+- Lucide React Icons
+- Axios
 
 ### Backend
-
-* FastAPI
-* Python
-* SQLAlchemy
-* Uvicorn
-
-### Database
-
-* PostgreSQL
-* Neon Database
-
-### Deployment
-
-* Vercel
-* Render
-
-### Version Control
-
-* Git
-* GitHub
-
-### Containerization
-
-* Docker
-* Docker Compose
+- FastAPI
+- Groq Python SDK (`groq`)
+- Python 3.10+
+- SQLAlchemy
+- PostgreSQL / Neon DB
+- Uvicorn
+- Pydantic v2 & Pydantic Settings
 
 ---
 
-## Architecture
+## License
 
-```text
-User
-  ↓
-React Frontend (Vercel)
-  ↓
-FastAPI Backend (Render)
-  ↓
-PostgreSQL Database (Neon)
-  ↓
-Project Generation Engine
-  ↓
-ZIP Download
-```
-
-Users configure project requirements through the React frontend. The FastAPI backend dynamically generates project templates, stores project metadata in PostgreSQL, packages the generated files into ZIP archives, and returns them for download.
-
----
-
-## API Endpoints
-
-### Health Check
-
-```http
-GET /
-```
-
-Returns backend status.
-
-### Generate Project
-
-```http
-POST /generate
-```
-
-Generates a new project based on user selections and returns a downloadable ZIP archive.
-
-### Project History
-
-```http
-GET /history
-```
-
-Returns generated project history stored in PostgreSQL.
-
-### Project Statistics
-
-```http
-GET /stats
-```
-
-Returns project analytics such as total generated projects.
-
----
-
-## Deployment
-
-### Frontend Hosting
-
-Platform: Vercel
-
-URL:
-https://dev-forge-fidr.vercel.app
-
-### Backend Hosting
-
-Platform: Render
-
-URL:
-https://devforge-5419.onrender.com
-
-### Database Hosting
-
-Platform: Neon PostgreSQL
-
----
-
-## Links
-
-### GitHub Profile
-
-https://github.com/Venukaranam98
-
-### Project Repository
-
-https://github.com/Venukaranam98/DevForge
-
-### Live Frontend
-
-https://dev-forge-fidr.vercel.app
-
-### Live Backend API
-
-https://devforge-5419.onrender.com
+MIT License
