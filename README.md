@@ -1,114 +1,106 @@
 # DevForge AI
 
-DevForge AI is an elite, full-stack AI SaaS platform that dynamically generates complete, production-ready starter project repositories powered by the **Groq AI API (`llama-3.3-70b-versatile`)** and a fast **FastAPI** backend orchestrator paired with a modern, dark-themed **React + JavaScript** frontend.
+DevForge AI is a full-stack application that generates complete project repositories using the Groq AI API (`llama-3.3-70b-versatile`), a FastAPI backend, and a React frontend.
 
----
+## Features
 
-## Key Highlights
+- AI Project Generation: Generates complete starter project file structures and code using Groq AI.
+- User Authentication: Secure Login and Signup authentication system with JWT token authorization.
+- User-Scoped History: Each authenticated user can view, preview, search, and download their own generated projects.
+- React Frontend: Built with React, Vite, and JavaScript.
+- FastAPI Backend: Powered by Python, FastAPI, SQLAlchemy, and the official Groq SDK.
+- Code Preview & Download: File tree explorer and one-click ZIP download for generated projects.
 
-- **Groq AI Integration**: Powered by the official `groq` SDK and `llama-3.3-70b-versatile` model for lightning-fast structured JSON project generation.
-- **100% React + JavaScript**: Pure React + JS (`.jsx`/`.js`) stack with zero TypeScript dependencies.
-- **Bespoke Design System**: Inspired by Linear, Vercel, Raycast, and Cursor with soft glassmorphism, Google Fonts (`Space Grotesk` & `Inter`), and Framer Motion micro-interactions.
-- **Complete Repositories**: Generates complete project file structures including source code, Dockerfiles, `docker-compose.yml`, `README.md`, `.gitignore`, and config files.
-- **Project History & Stats**: Persisted project metadata, interactive code tree explorer, architecture breakdown, and one-click ZIP downloads.
+## Project Structure
 
----
+- `backend/`: FastAPI application handling authentication, project generation, and database storage.
+- `frontend/`: React application providing user interface for generating and exploring projects.
 
-## Architecture Flow
+## Getting Started
 
-```text
-Frontend (React + JS + Framer Motion)
-  ↓
-REST API Request (X-Groq-Api-Key Header)
-  ↓
-FastAPI Orchestrator
-  ↓
-Groq AI Service (llama-3.3-70b-versatile)
-  ↓
-Structured JSON Response Parser
-  ↓
-Disk Storage Service & ZIP Packaging
-  ↓
-PostgreSQL Metadata Tracking
-  ↓
-ZIP Download & Interactive Code Preview
-```
+### Prerequisites
 
----
+- Python 3.10+
+- Node.js 18+
+- Groq API Key
 
-## Quick Start
+### Backend Setup
 
-### 1. Backend Setup
+1. Navigate to the backend folder:
+   ```bash
+   cd backend
+   ```
 
-```bash
-cd backend
-python -m venv venv
-venv\Scripts\activate  # Windows
-pip install -r requirements.txt
-```
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   # Windows:
+   venv\Scripts\activate
+   # macOS/Linux:
+   source venv/bin/activate
+   ```
 
-Create a `.env` file in `backend/`:
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```env
-DATABASE_URL=postgresql://... (or sqlite:///./devforge.db)
-GROQ_API_KEY=your_groq_api_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
-```
+4. Create a `.env` file in the `backend/` directory:
+   ```env
+   DATABASE_URL=sqlite:///./devforge.db
+   GROQ_API_KEY=your_groq_api_key_here
+   GROQ_MODEL=llama-3.3-70b-versatile
+   SECRET_KEY=your_jwt_secret_key_here
+   ```
 
-Run backend server:
+5. Start the API server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+   The backend will be available at `http://localhost:8000`.
 
-```bash
-uvicorn main:app --reload
-```
+### Frontend Setup
 
-Backend will run at `http://localhost:8000`. API docs available at `http://localhost:8000/docs`.
+1. Navigate to the frontend folder:
+   ```bash
+   cd frontend
+   ```
 
-### 2. Frontend Setup
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Frontend will run at `http://localhost:5173`.
-
----
+3. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+   The frontend will be available at `http://localhost:5173`.
 
 ## Environment Variables
 
 | Variable | Description |
 | --- | --- |
-| `GROQ_API_KEY` | Groq API Key obtained from [Groq Console](https://console.groq.com/keys) |
-| `GROQ_MODEL` | Default model: `llama-3.3-70b-versatile` |
-| `DATABASE_URL` | PostgreSQL or SQLite database connection URL |
-| `SECRET_KEY` | JWT Secret Key for authentication |
-
----
+| `GROQ_API_KEY` | Groq API Key obtained from the Groq Console |
+| `GROQ_MODEL` | AI Model name (e.g., `llama-3.3-70b-versatile`) |
+| `DATABASE_URL` | SQLite or PostgreSQL connection string |
+| `SECRET_KEY` | Secret key used for JWT authentication |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | JWT access token expiration time in minutes |
 
 ## Tech Stack
 
 ### Frontend
-- React 19
+- React
 - Vite
-- JavaScript (JSX / ES6+)
-- Vanilla CSS Design System with CSS Custom Variables
-- Google Fonts (`Space Grotesk` + `Inter`)
-- Framer Motion
-- Lucide React Icons
-- Axios
+- JavaScript
+- CSS
+- Axios with CORS & JWT Interceptors
 
 ### Backend
 - FastAPI
-- Groq Python SDK (`groq`)
-- Python 3.10+
+- Python
 - SQLAlchemy
-- PostgreSQL / Neon DB
-- Uvicorn
-- Pydantic v2 & Pydantic Settings
+- Groq SDK
+- JWT & PBKDF2 Security
 
----
 
-## License
-
-MIT License

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sidebar } from "./components/layout/Sidebar";
 import { Header } from "./components/layout/Header";
 import { DashboardPage } from "./pages/DashboardPage";
@@ -7,13 +7,44 @@ import { HistoryPage } from "./pages/HistoryPage";
 import { TemplatesPage } from "./pages/TemplatesPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { AuthPage } from "./pages/AuthPage";
 import { ProjectPreviewModal } from "./components/preview/ProjectPreviewModal";
 import { projectService } from "./services/projectService";
+import { authService } from "./services/authService";
 
 function App() {
+  const [user, setUser] = useState(() => authService.getCurrentUser());
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [generatorPrompt, setGeneratorPrompt] = useState("");
   const [previewProject, setPreviewProject] = useState(null);
+
+  useEffect(() => {
+    const token = authService.getToken();
+    if (token) {
+      authService
+        .getMe()
+        .then((userData) => {
+          setUser(userData);
+          setLoading(false);
+        })
+        .catch(() => {
+          setUser(null);
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  const handleAuthSuccess = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setUser(null);
+  };
 
   const handleNavigateToGenerate = (prompt = "") => {
     if (prompt) {
@@ -49,10 +80,35 @@ function App() {
     }
   };
 
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "var(--bg-main)",
+        color: "var(--text-muted)",
+        fontFamily: "var(--font-sans)"
+      }}>
+        Initializing DevForge Workspace...
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthPage onAuthSuccess={handleAuthSuccess} />;
+  }
+
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)", color: "var(--text-primary)" }}>
       {/* Sidebar Navigation */}
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        user={user}
+        onLogout={handleLogout}
+      />
 
       {/* Main Content Area */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
@@ -88,7 +144,7 @@ function App() {
 
           {activeTab === "settings" && <SettingsPage />}
 
-          {activeTab === "profile" && <ProfilePage />}
+          {activeTab === "profile" && <ProfilePage user={user} />}
         </main>
       </div>
 

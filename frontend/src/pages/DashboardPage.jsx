@@ -52,11 +52,11 @@ export const DashboardPage = ({ onNavigateToGenerate, onPreviewProject }) => {
       {/* Analytics Cards */}
       <StatsCards
         totalProjects={stats.total_projects || projects.length}
-        storageUsedMb={stats.storage_used_mb || 1.2}
+        storageUsedMb={stats.storage_used_mb || 0}
         activeEngine="Groq Llama 3.3"
       />
 
-      {/* Recent Projects Table */}
+      {/* User's Recent Projects Table */}
       <RecentProjectsTable
         projects={projects}
         onPreview={onPreviewProject}

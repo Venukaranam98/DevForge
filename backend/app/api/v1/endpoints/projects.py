@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from typing import Optional, List
 
 from app.core.database import get_db
-from app.api.v1.endpoints.auth import get_current_user_optional
+from app.api.v1.endpoints.auth import get_current_user_optional, get_current_user
 from app.db.models.user import User
 from app.schemas.project import (
     ProjectGenerateRequest,
@@ -27,16 +27,15 @@ def generate_project(
     request: ProjectGenerateRequest,
     x_groq_api_key: Optional[str] = Header(None, alias="X-Groq-Api-Key"),
     db: Session = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     if not request.prompt or not request.prompt.strip():
         raise HTTPException(status_code=400, detail="Prompt string cannot be empty.")
     
-    user_id = current_user.id if current_user else None
     orchestrator = OrchestrationService(db, api_key=x_groq_api_key)
     
     try:
-        project = orchestrator.generate_project(request, user_id=user_id)
+        project = orchestrator.generate_project(request, user_id=current_user.id)
         return project
     except ValueError as ve:
         raise HTTPException(
@@ -54,11 +53,10 @@ def list_projects(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
-    user_id = current_user.id if current_user else None
     repo = ProjectRepository(db)
-    items, total = repo.list(user_id=user_id, skip=skip, limit=limit)
+    items, total = repo.list(user_id=current_user.id, skip=skip, limit=limit)
     return ProjectListResponse(
         items=[ProjectResponse.model_validate(p) for p in items],
         total=total,

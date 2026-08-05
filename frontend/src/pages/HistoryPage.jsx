@@ -24,8 +24,8 @@ export const HistoryPage = ({ onPreviewProject }) => {
 
   const filteredProjects = projects.filter(
     (p) =>
-      p.project_name.toLowerCase().includes(search.toLowerCase()) ||
-      p.prompt.toLowerCase().includes(search.toLowerCase())
+      (p.project_name && p.project_name.toLowerCase().includes(search.toLowerCase())) ||
+      (p.prompt && p.prompt.toLowerCase().includes(search.toLowerCase()))
   );
 
   const handleDownload = (downloadUrl, name) => {
@@ -43,10 +43,10 @@ export const HistoryPage = ({ onPreviewProject }) => {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
           <h2 style={{ fontSize: "1.5rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
-            Project Generation History
+            Your Generation History
           </h2>
           <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
-            View, preview, and download all past Groq AI synthesized repositories
+            View, preview, and download your past AI-generated project starter repositories
           </p>
         </div>
 
@@ -64,18 +64,24 @@ export const HistoryPage = ({ onPreviewProject }) => {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search history..."
+            placeholder="Search your projects..."
             className="df-input"
             style={{ paddingLeft: "2.25rem", fontFamily: "monospace" }}
           />
         </div>
       </div>
 
-      <RecentProjectsTable
-        projects={filteredProjects}
-        onPreview={onPreviewProject}
-        onDownload={handleDownload}
-      />
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "3rem", color: "var(--text-muted)" }}>
+          Loading your history...
+        </div>
+      ) : (
+        <RecentProjectsTable
+          projects={filteredProjects}
+          onPreview={onPreviewProject}
+          onDownload={handleDownload}
+        />
+      )}
     </motion.div>
   );
 };

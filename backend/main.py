@@ -6,7 +6,8 @@ from fastapi.responses import FileResponse, JSONResponse
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.core.database import engine, Base, get_db, auto_migrate_schema
+from app.core.database import engine, get_db, auto_migrate_schema
+from app.db.base import Base
 from app.api.v1.router import api_router
 from app.schemas.project import ProjectGenerateRequest, ProjectResponse
 from app.services.orchestration_service import OrchestrationService
@@ -24,21 +25,43 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# CORS origins
+# Explicit CORS origins (No "*" when credentials/Authorization header is used)
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
-    "*"
+    "http://127.0.0.1:3000",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
 ]
 
+# Register CORSMiddleware BEFORE routers
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=False,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Preserve HTTPException status codes and details
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+        headers=exc.headers
+    )
+
+# Global Exception Handler to guarantee CORS headers on uncaught 500 errors
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc: Exception):
+    import traceback
+    print("UNCAUGHT EXCEPTION LOGGED:\n", traceback.format_exc())
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Internal server error: {str(exc)}"}
+    )
 
 # Mount API V1 Router
 app.include_router(api_router, prefix=settings.API_V1_STR)

@@ -1,20 +1,35 @@
 import jwt
+import hashlib
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Union, Any
-from passlib.context import CryptContext
 from app.core.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def get_password_hash(password: str) -> str:
+    salt = hashlib.sha256(settings.SECRET_KEY.encode()).hexdigest()[:16]
+    hashed = hashlib.pbkdf2_hmac(
+        'sha256',
+        password.encode('utf-8'),
+        salt.encode('utf-8'),
+        100000
+    ).hex()
+    return f"pbkdf2:{salt}:{hashed}"
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    try:
-        return pwd_context.verify(plain_password, hashed_password)
-    except Exception:
-        # Fallback basic hash comparison if bcrypt format differs
-        return plain_password == hashed_password
-
-def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    if not hashed_password:
+        return False
+    if hashed_password.startswith("pbkdf2:"):
+        parts = hashed_password.split(":")
+        if len(parts) == 3:
+            salt = parts[1]
+            expected_hash = parts[2]
+            computed_hash = hashlib.pbkdf2_hmac(
+                'sha256',
+                plain_password.encode('utf-8'),
+                salt.encode('utf-8'),
+                100000
+            ).hex()
+            return computed_hash == expected_hash
+    return plain_password == hashed_password
 
 def create_access_token(subject: Union[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     if expires_delta:
